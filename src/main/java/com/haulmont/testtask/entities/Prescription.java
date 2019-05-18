@@ -1,18 +1,19 @@
 package com.haulmont.testtask.entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-public class Prescription { // рецепт
+public class Prescription implements Entity { // рецепт
     private long id;
     private String description; // описание
     private Patient patient;
     private Doctor doctor;
-    private Date createDate; // дата создания
-    private Date expireDate; // срок окончания
-    private String priority;
+    private LocalDate createDate; // дата создания
+    private LocalDate expireDate; // срок окончания
+    private Priority priority;
 
     public Prescription(long id, String description, Patient patient, Doctor doctor,
-                        Date createDate, Date expireDate, String priority) {
+                        LocalDate createDate, LocalDate expireDate, Priority priority) {
         this.id = id;
         this.description = description;
         this.patient = patient;
@@ -54,27 +55,27 @@ public class Prescription { // рецепт
         this.doctor = doctor;
     }
 
-    public Date getCreateDate() {
+    public LocalDate getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;
     }
 
-    public Date getExpireDate() {
+    public LocalDate getExpireDate() {
         return expireDate;
     }
 
-    public void setExpireDate(Date expireDate) {
+    public void setExpireDate(LocalDate expireDate) {
         this.expireDate = expireDate;
     }
 
-    public String getPriority() {
+    public Priority getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(Priority priority) {
         this.priority = priority;
     }
 }

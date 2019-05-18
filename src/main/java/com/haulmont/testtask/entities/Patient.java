@@ -1,6 +1,6 @@
 package com.haulmont.testtask.entities;
 
-public class Patient {
+public class Patient implements Entity {
     private long id;
     private String name;
     private String secname;
