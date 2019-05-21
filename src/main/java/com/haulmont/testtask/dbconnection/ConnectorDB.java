@@ -11,7 +11,7 @@ public class ConnectorDB implements Closeable {
     public ConnectorDB() {
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
-            conn = DriverManager.getConnection("jdbc:hsqldb:file:./database/hospitalDB", "SA", "");
+            conn = DriverManager.getConnection("jdbc:hsqldb:file:./hospital_data/hospitalDB", "SA", "");
         } catch (ClassNotFoundException | SQLException e) {
             conn = null;
             e.printStackTrace();

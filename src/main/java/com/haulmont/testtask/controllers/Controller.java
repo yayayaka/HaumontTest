@@ -14,23 +14,23 @@ public class Controller<T extends Model, K extends Entity> {
         this.model = model;
     }
 
-    List<K> getAll() {
+    public List<K> getAll() {
         return model.getAll();
     }
 
-    boolean addOne(K entity) {
+    public boolean addOne(K entity) {
         return model.addOne(entity);
     }
 
-    boolean updateOne(K entity) {
+    public boolean updateOne(K entity) {
         return model.updateOne(entity);
     }
 
-    boolean deleteOne(long id) {
+    public boolean deleteOne(long id) {
         return model.deleteOne(id);
     }
 
-    List<K> getFiltered(String descriptionFilter,
+    public List<K> getFiltered(String descriptionFilter,
                         Priority priorityFilter,
                         Patient patientFilter) {
         return model.getFiltered(descriptionFilter,
@@ -38,11 +38,11 @@ public class Controller<T extends Model, K extends Entity> {
                 patientFilter);
     }
 
-    long getId(K entity) {
+    public long getId(K entity) {
         return model.getId(entity);
     }
 
-    K getPriorityName(long id) {
+    public K getPriorityName(long id) {
         return (K)model.getOne(id);
     }
 }
