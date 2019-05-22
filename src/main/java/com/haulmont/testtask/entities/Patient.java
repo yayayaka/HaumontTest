@@ -15,6 +15,14 @@ public class Patient implements Entity {
         this.phoneNo = phoneNo;
     }
 
+    public Patient() {
+        id = -1;
+        name = "";
+        secname = "";
+        otch = "";
+        phoneNo = -1;
+    }
+
     public long getId() {
         return id;
     }

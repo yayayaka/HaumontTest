@@ -1,23 +1,17 @@
 package com.haulmont.testtask;
 
 import com.haulmont.testtask.controllers.Controller;
-import com.haulmont.testtask.entities.Entity;
 import com.haulmont.testtask.entities.Patient;
 import com.haulmont.testtask.entities.Priority;
 import com.haulmont.testtask.forms.NewPatientForm;
 import com.haulmont.testtask.models.Model;
 import com.haulmont.testtask.models.PatientModel;
 import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.ObjectProperty;
-import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import javafx.scene.control.SelectionMode;
 
 import java.util.List;
 
@@ -30,8 +24,7 @@ public class MainUI extends UI {
     private TextField filterByPatient;
     private Button clearFiltersButton;
     private Button addEntityButton;
-    private NewPatientForm form = new NewPatientForm(this);
-    private Window window;
+    private NewPatientForm window;
 //    private Table table;
 
 
@@ -41,10 +34,10 @@ public class MainUI extends UI {
         layout.setMargin(true);
         controller = new Controller<>(new PatientModel());
         List<Patient> patients = controller.getAll();
-//        BeanItemContainer<Patient> container =
-//                new BeanItemContainer<Patient>(Patient.class, patients);
-//        grid = new Grid(container);
-        grid = new Grid();
+        BeanItemContainer<Patient> container =
+                new BeanItemContainer<Patient>(Patient.class, patients);
+        grid = new Grid(container);
+//        grid = new Grid();
         updateList();
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         filterByDescription = new TextField("Filter by description...");
@@ -60,26 +53,23 @@ public class MainUI extends UI {
         addEntityButton = new Button("Add new patient");
         addEntityButton.addClickListener(e -> {
             grid.deselectAll();
-            form.setDeleteDisable(true);
-            window = new Window("New Patient", form);
-            window.setModal(true);
-            window.setResizable(false);
-            window.center();
+            window = new NewPatientForm(this, "New patient");
+//            window.setPatient(new Patient());
+            window.setDeleteDisable(true);
+            window.setCreateNewForm(true);
             addWindow(window);
         });
         grid.addItemClickListener(e -> {
             if (e.getItem() != null) {
-//                form.setPatient((Patient)((BeanItem)e.getItem()).getBean());
-                form.setPatient(new Patient( (long)e.getItem().getItemProperty("ID").getValue(),
-                        (String)e.getItem().getItemProperty("First Name").getValue(),
-                        (String)e.getItem().getItemProperty("Second Name").getValue(),
-                        (String)e.getItem().getItemProperty("Middle Name").getValue(),
-                        (int)e.getItem().getItemProperty("Phone No").getValue()));
-                form.setDeleteDisable(false);
-                window = new Window("Patient", form);
-                window.setModal(true);
-                window.setResizable(false);
-                window.center();
+                window = new NewPatientForm(this, "Patient");
+                window.setPatient((Patient)((BeanItem)e.getItem()).getBean());
+//                window.setPatient(new Patient( (long)e.getItem().getItemProperty("ID").getValue(),
+//                        (String)e.getItem().getItemProperty("First Name").getValue(),
+//                        (String)e.getItem().getItemProperty("Second Name").getValue(),
+//                        (String)e.getItem().getItemProperty("Middle Name").getValue(),
+//                        (int)e.getItem().getItemProperty("Phone No").getValue()));
+                window.setDeleteDisable(false);
+                window.setCreateNewForm(false);
                 addWindow(window);
             }
         });
@@ -87,8 +77,8 @@ public class MainUI extends UI {
                 filterByPatient, clearFiltersButton, addEntityButton);
         toolbar.setSpacing(true);
 
-        HorizontalLayout main = new HorizontalLayout(grid);//, form);
-//        HorizontalLayout main = new HorizontalLayout(table);//, form);
+        HorizontalLayout main = new HorizontalLayout(grid);//, window);
+//        HorizontalLayout main = new HorizontalLayout(table);//, window);
         main.setSizeFull();
 //        main.setMargin(true);
         grid.setSizeFull();
@@ -100,18 +90,19 @@ public class MainUI extends UI {
 
     public void updateList() {
         List<Patient> patients = controller.getAll();
-//        BeanItemContainer<Entity> container =
-//                new BeanItemContainer<Entity>(Entity.class, patients);
-//        grid.setContainerDataSource(container);
-        grid = new Grid("Patients");
-        grid.addColumn("ID", Long.class);
-        grid.addColumn("First Name", String.class);
-        grid.addColumn("Second Name", String.class);
-        grid.addColumn("Middle Name", String.class);
-        grid.addColumn("Phone No", Integer.class);
-        for (Patient patient : patients) {
-            grid.addRow(patient.getId(), patient.getName(), patient.getSecname(),
-                    patient.getOtch(), patient.getPhoneNo());
-        }
+        BeanItemContainer<Patient> container =
+                new BeanItemContainer<Patient>(Patient.class, patients);
+//        grid.
+        grid.setContainerDataSource(container);
+//        grid = new Grid();
+//        grid.addColumn("ID", Long.class);
+//        grid.addColumn("First Name", String.class);
+//        grid.addColumn("Second Name", String.class);
+//        grid.addColumn("Middle Name", String.class);
+//        grid.addColumn("Phone No", Integer.class);
+//        for (Patient patient : patients) {
+//            grid.addRow(patient.getId(), patient.getName(), patient.getSecname(),
+//                    patient.getOtch(), patient.getPhoneNo());
+//        }
     }
 }

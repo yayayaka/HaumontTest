@@ -9,13 +9,11 @@ import com.haulmont.testtask.models.PatientModel;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class NewPatientForm extends FormLayout {
+public class NewPatientForm extends Window {
+    private FormLayout layout = new FormLayout();
     private TextField firstName = new TextField("First name");
     private TextField lastName = new TextField("Last name");
     private TextField middleName = new TextField("Middle name");
@@ -24,18 +22,23 @@ public class NewPatientForm extends FormLayout {
     private Button delete = new Button("Delete");
     private boolean isNewForm = false;
 
-    private Controller<Model, Entity> controller = new Controller<>(new PatientModel());
+    private Controller<PatientModel, Patient> controller = new Controller<>(new PatientModel());
     private Patient patient;
     private MainUI mainUI;
 //    private Binder<Patient> binder = new Binder<>(Patient.class);
 //    BeanFieldGroup<Patient> binder = new BeanFieldGroup<>(Patient.class);
 
-    public NewPatientForm(MainUI mainUI) {
+    public NewPatientForm(MainUI mainUI, String caption) {
+        super(caption);
         this.mainUI = mainUI;
-
+        setModal(true);
+        setResizable(false);
+        center();
+        layout.setMargin(true);
         setSizeUndefined();
         HorizontalLayout buttons = new HorizontalLayout(save, delete);
-        addComponents(firstName, lastName, middleName, phone, buttons);
+        layout.addComponents(firstName, lastName, middleName, phone, buttons);
+        setContent(layout);
 
         save.setStyleName(ValoTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
@@ -73,17 +76,26 @@ public class NewPatientForm extends FormLayout {
     private void delete() {
         controller.deleteOne(patient.getId());//delete(patient);
         mainUI.updateList();
+        this.close();
 //        setVisible(false);
     }
 
     private void save() {
         if (isNewForm) {
-            controller.addOne(patient);//save(patient);
+            try {
+                patient = new Patient(-1, firstName.getValue(), lastName.getValue(),
+                        middleName.getValue(), Integer.valueOf(phone.getValue()));
+                controller.addOne(patient);//save(patient);
+            } catch (NumberFormatException e) {
+                // todo
+            }
         } else {
+            patient = new Patient(patient.getId(), firstName.getValue(), lastName.getValue(),
+                    middleName.getValue(), Integer.valueOf(phone.getValue()));
             controller.updateOne(patient);
         }
-
         mainUI.updateList();
-        setVisible(false);
+        this.close();
+//        setVisible(false);
     }
 }
