@@ -22,4 +22,6 @@ public interface Model<T extends Entity> {
     long getId(T entity);
 
     T getOne(long id);
+
+    T searchByFields(T entity);
 }

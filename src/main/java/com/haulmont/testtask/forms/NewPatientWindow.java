@@ -2,17 +2,15 @@ package com.haulmont.testtask.forms;
 
 import com.haulmont.testtask.MainUI;
 import com.haulmont.testtask.controllers.Controller;
-import com.haulmont.testtask.entities.Entity;
 import com.haulmont.testtask.entities.Patient;
-import com.haulmont.testtask.models.Model;
 import com.haulmont.testtask.models.PatientModel;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.PropertyId;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class NewPatientForm extends Window {
+public class NewPatientWindow extends Window {
     private FormLayout layout = new FormLayout();
     private TextField firstName = new TextField("First name");
     private TextField lastName = new TextField("Last name");
@@ -22,14 +20,17 @@ public class NewPatientForm extends Window {
     private Button delete = new Button("Delete");
     private boolean isNewForm = false;
 
-    private Controller<PatientModel, Patient> controller = new Controller<>(new PatientModel());
+    private Controller<PatientModel, Patient> controller =
+            new Controller<>(new PatientModel());
     private Patient patient;
     private MainUI mainUI;
 //    private Binder<Patient> binder = new Binder<>(Patient.class);
 //    BeanFieldGroup<Patient> binder = new BeanFieldGroup<>(Patient.class);
+//    FieldGroup group = new FieldGroup();
 
-    public NewPatientForm(MainUI mainUI, String caption) {
+    public NewPatientWindow(MainUI mainUI, String caption) {
         super(caption);
+//        binder.setItemDataSource(patient);
         this.mainUI = mainUI;
         setModal(true);
         setResizable(false);
@@ -61,23 +62,18 @@ public class NewPatientForm extends Window {
     public void setPatient(Patient patient) {
         this.patient = patient;
 //        binder.setBean(patient);
+//        binder.setItemDataSource(patient);
         firstName.setValue(patient.getName());
         lastName.setValue(patient.getSecname());
         middleName.setValue(patient.getOtch());
         phone.setValue(String.valueOf(patient.getPhoneNo()));
-//        binder.setItemDataSource(patient);
-
-        // Show delete button for only customers already in the database
-//        delete.setVisible(patient.isPersisted());
-//        setVisible(true);
         firstName.selectAll();
     }
 
     private void delete() {
-        controller.deleteOne(patient.getId());//delete(patient);
-        mainUI.updateList();
+        controller.deleteOne(patient.getId());
+        mainUI.updatePatientList();
         this.close();
-//        setVisible(false);
     }
 
     private void save() {
@@ -85,17 +81,20 @@ public class NewPatientForm extends Window {
             try {
                 patient = new Patient(-1, firstName.getValue(), lastName.getValue(),
                         middleName.getValue(), Integer.valueOf(phone.getValue()));
-                controller.addOne(patient);//save(patient);
+                controller.addOne(patient);
             } catch (NumberFormatException e) {
-                // todo
+                Window alertWindow = new Window("Warning");
+                alertWindow.setResizable(false);
+                alertWindow.setModal(true);
+                alertWindow.setContent(new Label("Invalid phone value"));
+                mainUI.addWindow(alertWindow);
             }
         } else {
             patient = new Patient(patient.getId(), firstName.getValue(), lastName.getValue(),
                     middleName.getValue(), Integer.valueOf(phone.getValue()));
             controller.updateOne(patient);
         }
-        mainUI.updateList();
+        mainUI.updatePatientList();
         this.close();
-//        setVisible(false);
     }
 }

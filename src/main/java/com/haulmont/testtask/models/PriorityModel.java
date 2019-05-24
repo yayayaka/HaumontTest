@@ -17,7 +17,7 @@ public class PriorityModel implements Model<Priority> {
         long result;
         try(ConnectorDB connector = new ConnectorDB()) {
             Connection conn = connector.getConnection();
-            PreparedStatement statement = conn.prepareStatement("SELECT id FROM Priority " +
+            PreparedStatement statement = conn.prepareStatement("SELECT id FROM Prescr_priority " +
                     "WHERE prior_name = ?");
             statement.setString(1, priority.name());
             ResultSet resultSet = statement.executeQuery();
@@ -48,6 +48,11 @@ public class PriorityModel implements Model<Priority> {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    @Override
+    public Priority searchByFields(Priority entity) {
+        throw new NotImplementedException();
     }
 
     @Override

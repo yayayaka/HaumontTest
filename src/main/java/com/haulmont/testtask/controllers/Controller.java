@@ -45,4 +45,12 @@ public class Controller<T extends Model, K extends Entity> {
     public K getPriorityName(long id) {
         return (K)model.getOne(id);
     }
+
+    public K getOne(long id) {
+        return (K)model.getOne(id);
+    }
+
+    public K searchByFields(K entity) {
+        return (K)model.searchByFields(entity);
+    }
 }

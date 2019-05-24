@@ -167,4 +167,9 @@ public class PrescriptionModel implements Model<Prescription> {
     public Prescription getOne(long id) {
         throw new NotImplementedException();
     }
+
+    @Override
+    public Prescription searchByFields(Prescription entity) {
+        throw new NotImplementedException();
+    }
 }

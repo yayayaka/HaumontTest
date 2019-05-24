@@ -62,4 +62,9 @@ public class Patient implements Entity {
     public void setPhoneNo(int phoneNo) {
         this.phoneNo = phoneNo;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s.%s.", secname, name.charAt(0), otch.charAt(0));
+    }
 }

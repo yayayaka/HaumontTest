@@ -54,4 +54,9 @@ public class Doctor implements Entity {
     public void setSpec(String spec) {
         this.spec = spec;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s.%s.", secname, name.charAt(0), otch.charAt(0));
+    }
 }

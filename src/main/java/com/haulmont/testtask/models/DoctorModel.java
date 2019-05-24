@@ -117,7 +117,72 @@ public class DoctorModel implements Model<Doctor>{
 
     @Override
     public long getId(Doctor entity) {
-        throw new NotImplementedException();
+        try(ConnectorDB connector = new ConnectorDB()) {
+            Connection conn = connector.getConnection();
+            PreparedStatement statement = conn.prepareStatement("SELECT id FROM Doctor " +
+                    "WHERE (doc_name = ?) AND " +
+                    "(doc_secname = ?) AND " +
+                    "(doc_otch = ?) ");
+            statement.setString(1, entity.getName());
+            statement.setString(2, entity.getSecname());
+            statement.setString(3, entity.getOtch());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getLong(1);
+            } else
+                return -1;
+        } catch (SQLException e) {
+            return -1;
+        }
+    }
+
+    @Override
+    public Doctor searchByFields(Doctor entity) {
+        try(ConnectorDB connector = new ConnectorDB()) {
+            Connection conn = connector.getConnection();
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM Doctor " +
+                    "WHERE (id LIKE ?) AND " +
+                    "(doc_name LIKE ?) AND " +
+                    "(doc_secname LIKE ?) AND " +
+                    "(doc_otch LIKE ?) AND " +
+                    "(doc_spec LIKE ?) ");
+            if (entity.getId() == -1) {
+                statement.setString(1, "%");
+            } else {
+                statement.setLong(1, entity.getId());
+            }
+            if (entity.getName() == "") {
+                statement.setString(2, "%");
+            } else {
+                statement.setString(2, entity.getName());
+            }
+            if (entity.getSecname() == "") {
+                statement.setString(3, "%");
+            } else {
+                statement.setString(3, entity.getSecname());
+            }
+            if (entity.getOtch() == "") {
+                statement.setString(4, "%");
+            } else {
+                statement.setString(4, entity.getOtch());
+            }
+            if (entity.getSpec() == "") {
+                statement.setString(5, "%");
+            } else {
+                statement.setString(5, entity.getSpec());
+            }
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new Doctor(resultSet.getLong(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5));
+            } else
+                return null;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public ArrayList<DoctorPrescrInfo> getDocPrescInfo() {
