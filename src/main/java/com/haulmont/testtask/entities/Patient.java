@@ -1,15 +1,15 @@
 package com.haulmont.testtask.entities;
 
-import com.google.common.base.Objects;
+import com.google.gwt.thirdparty.guava.common.base.Objects;
 
 public class Patient implements Entity {
     private long id;
     private String name;
     private String secname;
     private String otch;
-    private int phoneNo;
+    private long phoneNo;
 
-    public Patient(long id, String name, String secname, String otch, int phoneNo) {
+    public Patient(long id, String name, String secname, String otch, long phoneNo) {
         this.id = id;
         this.name = name;
         this.secname = secname;
@@ -57,11 +57,11 @@ public class Patient implements Entity {
         this.otch = otch;
     }
 
-    public int getPhoneNo() {
+    public long getPhoneNo() {
         return phoneNo;
     }
 
-    public void setPhoneNo(int phoneNo) {
+    public void setPhoneNo(long phoneNo) {
         this.phoneNo = phoneNo;
     }
 

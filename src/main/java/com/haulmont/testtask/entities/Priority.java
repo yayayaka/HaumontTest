@@ -1,6 +1,6 @@
 package com.haulmont.testtask.entities;
 
-import com.google.common.base.Objects;
+import com.google.gwt.thirdparty.guava.common.base.Objects;
 
 public class Priority implements Entity {
     long id;

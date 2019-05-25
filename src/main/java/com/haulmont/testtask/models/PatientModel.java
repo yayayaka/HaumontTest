@@ -24,7 +24,7 @@ public class PatientModel implements Model<Patient> {
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getString(4),
-                        resultSet.getInt(5));
+                        resultSet.getLong(5));
                 patients.add(currentPatient);
             }
         } catch (SQLException e) {
@@ -46,7 +46,7 @@ public class PatientModel implements Model<Patient> {
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getString(4),
-                        resultSet.getInt(5));
+                        resultSet.getLong(5));
                 return patient;
             } else
                 return null;
@@ -67,7 +67,7 @@ public class PatientModel implements Model<Patient> {
             statement.setString(1, patient.getName());
             statement.setString(2, patient.getSecname());
             statement.setString(3, patient.getOtch());
-            statement.setInt(4, patient.getPhoneNo());
+            statement.setLong(4, patient.getPhoneNo());
             result = statement.executeUpdate();
             return result > 0 ? true : false;
         } catch (SQLException e) {
@@ -86,7 +86,7 @@ public class PatientModel implements Model<Patient> {
             statement.setString(1, patient.getName());
             statement.setString(2, patient.getSecname());
             statement.setString(3, patient.getOtch());
-            statement.setInt(4, patient.getPhoneNo());
+            statement.setLong(4, patient.getPhoneNo());
             statement.setLong(5, patient.getId());
             result = statement.executeUpdate();
             return result > 0 ? true : false;

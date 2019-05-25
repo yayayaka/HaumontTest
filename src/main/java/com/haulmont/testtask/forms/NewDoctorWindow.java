@@ -5,6 +5,7 @@ import com.haulmont.testtask.controllers.Controller;
 import com.haulmont.testtask.entities.Doctor;
 import com.haulmont.testtask.entities.Entity;
 import com.haulmont.testtask.models.DoctorModel;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -25,6 +26,14 @@ public class NewDoctorWindow extends NewEntityWindow {
 
     public NewDoctorWindow(MainUI mainUI, String caption) {
         super(mainUI, caption);
+        firstName.addValidator(new StringLengthValidator("Длина поля не должна превышать 20 символов",
+                1, 20, false));
+        lastName.addValidator(new StringLengthValidator("Длина поля не должна превышать 20 символов",
+                1, 20, false));
+        middleName.addValidator(new StringLengthValidator("Длина поля не должна превышать 20 символов",
+                0, 20, true));
+        specialization.addValidator(new StringLengthValidator("Длина поля не должна превышать 20 символов",
+                1, 20, false));
         this.mainUI = mainUI;
         setModal(true);
         setResizable(false);

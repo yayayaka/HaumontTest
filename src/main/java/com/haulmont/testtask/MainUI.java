@@ -2,16 +2,14 @@ package com.haulmont.testtask;
 
 import com.haulmont.testtask.controllers.Controller;
 import com.haulmont.testtask.entities.*;
-import com.haulmont.testtask.forms.NewDoctorWindow;
-import com.haulmont.testtask.forms.NewEntityWindow;
-import com.haulmont.testtask.forms.NewPatientWindow;
-import com.haulmont.testtask.forms.NewPrescriptionWindow;
+import com.haulmont.testtask.forms.*;
 import com.haulmont.testtask.models.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import javafx.scene.control.Alert;
 
 import java.util.List;
 
@@ -313,18 +311,16 @@ public class MainUI extends UI {
             Controller<PatientModel, Patient> controller =
                     new Controller<>(new PatientModel());
             if (grid.getSelectedRow() != null) {
-                controller.deleteOne(((Patient) grid.getSelectedRow()).getId());
+                boolean isSuccessDel = controller.deleteOne(((Patient) grid.getSelectedRow()).getId());
+                if (!isSuccessDel) {
+                    AlertWindow alertWindow = new AlertWindow(
+                            "Удаление не удалось, воэможно пациент имеет зависящие от него рецепты.");
+                    addWindow(alertWindow);
+                }
                 initEntityPage(Entity.PATIENT);
             } else {
-                Window alertWindow = new Window();
-                alertWindow.setModal(true);
-                alertWindow.center();
-                Label label = new Label("Ни одна строка не выделена!");
-                HorizontalLayout layout = new HorizontalLayout(label);
-                layout.setWidth("300");
-                layout.setHeight("100");
-                layout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
-                alertWindow.setContent(layout);
+                AlertWindow alertWindow = new AlertWindow(
+                        "Ни одна строка не выделена!");
                 addWindow(alertWindow);
             }
         });
@@ -334,18 +330,16 @@ public class MainUI extends UI {
             Controller<DoctorModel, Doctor> controller =
                     new Controller<>(new DoctorModel());
             if (grid.getSelectedRow() != null) {
-                controller.deleteOne(((Doctor) grid.getSelectedRow()).getId());
+                boolean isSuccessDel = controller.deleteOne(((Doctor) grid.getSelectedRow()).getId());
+                if (!isSuccessDel) {
+                    AlertWindow alertWindow = new AlertWindow(
+                            "Удаление не удалось, воэможно доктор имеет зависящие от него рецепты.");
+                    addWindow(alertWindow);
+                }
                 initEntityPage(Entity.DOCTOR);
             } else {
-                Window alertWindow = new Window();
-                alertWindow.setModal(true);
-                alertWindow.center();
-                Label label = new Label("Ни одна строка не выделена!");
-                HorizontalLayout layout = new HorizontalLayout(label);
-                layout.setWidth("300");
-                layout.setHeight("100");
-                layout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
-                alertWindow.setContent(layout);
+                AlertWindow alertWindow = new AlertWindow(
+                        "Ни одна строка не выделена!");
                 addWindow(alertWindow);
             }
         });
@@ -358,15 +352,8 @@ public class MainUI extends UI {
                 controller.deleteOne(((Prescription) grid.getSelectedRow()).getId());
                 initEntityPage(Entity.PRESCRIPTION);
             } else {
-                Window alertWindow = new Window();
-                alertWindow.setModal(true);
-                alertWindow.center();
-                Label label = new Label("Ни одна строка не выделена!");
-                HorizontalLayout layout = new HorizontalLayout(label);
-                layout.setWidth("300");
-                layout.setHeight("100");
-                layout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
-                alertWindow.setContent(layout);
+                AlertWindow alertWindow = new AlertWindow(
+                        "Ни одна строка не выделена!");
                 addWindow(alertWindow);
             }
         });

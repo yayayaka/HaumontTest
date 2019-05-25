@@ -7,7 +7,13 @@ import com.haulmont.testtask.models.DoctorModel;
 import com.haulmont.testtask.models.PatientModel;
 import com.haulmont.testtask.models.PrescriptionModel;
 import com.haulmont.testtask.models.PriorityModel;
+import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.validator.BeanValidator;
+import com.vaadin.data.validator.DateRangeValidator;
+import com.vaadin.data.validator.NullValidator;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -43,6 +49,21 @@ public class NewPrescriptionWindow extends NewEntityWindow {
 
     public NewPrescriptionWindow(MainUI mainUI, String caption) {
         super(mainUI, caption);
+        description.addValidator(new StringLengthValidator(
+                "Длина поля не должна превышать 20 символов",
+                1, 20, false));
+        patient.addValidator(new NullValidator(
+                "Значение не выбрано", false));
+        doctor.addValidator(new NullValidator(
+                "Значение не выбрано", false));
+        creationDate.addValidator(new DateRangeValidator(
+                "Неверное значение даты", new java.util.Date(0L),
+                new java.util.Date(Long.MAX_VALUE), Resolution.DAY));
+        expireDate.addValidator(new DateRangeValidator(
+                "Неверное значение даты", new java.util.Date(0L),
+                new java.util.Date(Long.MAX_VALUE), Resolution.DAY));
+        priority.addValidator(new NullValidator(
+                "Значение не выбрано", false));
         this.mainUI = mainUI;
         setModal(true);
         setResizable(false);
@@ -50,7 +71,8 @@ public class NewPrescriptionWindow extends NewEntityWindow {
         layout.setMargin(true);
         setSizeUndefined();
         HorizontalLayout buttons = new HorizontalLayout(save, cancel);
-        layout.addComponents(description, patient, doctor, creationDate, expireDate, priority, buttons);
+        layout.addComponents(description, patient, doctor, creationDate,
+                expireDate, priority, buttons);
 //        ArrayList<String> patientsFIOs = new ArrayList<>();
 //        for (Patient patientItem : patientController.getAll()) {
 //            patientsFIOs.add(patientItem.getSecname() + " " +
@@ -131,8 +153,8 @@ public class NewPrescriptionWindow extends NewEntityWindow {
                 prescription = new Prescription(-1, description.getValue(),
                         (Patient) patient.getValue(),
                         (Doctor) doctor.getValue(),
-                        ((Date)creationDate.getValue()).toLocalDate(),
-                        ((Date)expireDate.getValue()).toLocalDate(),
+                        ((java.util.Date)creationDate.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                        ((java.util.Date)expireDate.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                         (Priority) priority.getValue());
                 prescrController.addOne(prescription);
 //                prescription = new Prescription(-1, description.getValue(), patientController.,

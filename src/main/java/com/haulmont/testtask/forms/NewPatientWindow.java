@@ -7,6 +7,7 @@ import com.haulmont.testtask.entities.Patient;
 import com.haulmont.testtask.models.PatientModel;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.validator.*;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -32,6 +33,18 @@ public class NewPatientWindow extends NewEntityWindow {
     public NewPatientWindow(MainUI mainUI, String caption) {
         super(mainUI, caption);
 //        binder.setItemDataSource(patient);
+        firstName.addValidator(new StringLengthValidator("Длина поля не должна превышать 20 символов",
+                1, 20, false));
+        lastName.addValidator(new StringLengthValidator("Длина поля не должна превышать 20 символов",
+                0, 20, true));
+        middleName.addValidator(new StringLengthValidator("Длина поля не должна превышать 20 символов",
+                0, 20, true));
+        phone.addValidator(new RegexpValidator("[0-9]{5,11}",
+                "Корректное значение поля 6 - 11 символов"));
+//                new RangeValidator<Long>("Корректное значение поля 6 - 11 символов",
+//                Long.class, 10000L, 99999999999L));
+//                new LongRangeValidator("Корректное значение поля 6 - 11 символов",
+//                10000L, 99999999999L));
         this.mainUI = mainUI;
         setModal(true);
         setResizable(false);
