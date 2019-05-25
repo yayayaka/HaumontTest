@@ -13,7 +13,6 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import javax.print.Doc;
 import java.util.List;
 
 @Theme(ValoTheme.THEME_NAME)
@@ -44,6 +43,7 @@ public class MainUI extends UI {
     Button delPrescriptionButton;
     Button showDoctorStatisticsButton;
     Button hideDoctorStatisticsButton;
+    Button applyFilter;
     HorizontalLayout filterToolbar;
     HorizontalLayout addEntityLayout;
 
@@ -58,26 +58,33 @@ public class MainUI extends UI {
         filterByDescription = new TextField("Filter by description...");
         filterByPriority = new NativeSelect("Select priority filter...");
         filterByPriority.addItems(PrioritySelect.values());
-        filterByDescription.addTextChangeListener(e -> {
-//            updatePrescriptionList();
-            updateEntityList(Entity.PRESCRIPTION);
-        });
+//        filterByDescription.addTextChangeListener(e -> {
+////            updatePrescriptionList();
+//            updateEntityList(Entity.PRESCRIPTION);
+//        });
         filterByPatient = new TextField("Filter by patient");
-        filterByPatient.addTextChangeListener(e -> {
-//            updatePrescriptionList();
-            updateEntityList(Entity.PRESCRIPTION);
-        });
-        filterByPatient.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        filterByDescription.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        filterByPriority.addValueChangeListener(e -> {
-//            updatePrescriptionList();
-            updateEntityList(Entity.PRESCRIPTION);
-        });
+//        filterByPatient.addTextChangeListener(e -> {
+////            updatePrescriptionList();
+//            updateEntityList(Entity.PRESCRIPTION);
+//        });
+//        filterByPatient.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+//        filterByDescription.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+//        filterByPriority.addValueChangeListener(e -> {
+////            updatePrescriptionList();
+//            updateEntityList(Entity.PRESCRIPTION);
+//        });
         clearFiltersButton = new Button("Clear filters");
+        clearFiltersButton.setStyleName(ValoTheme.BUTTON_DANGER);
         clearFiltersButton.addClickListener(e -> {
             filterByDescription.clear();
             filterByPriority.clear();
             filterByPatient.clear();
+            updateEntityList(Entity.PRESCRIPTION);
+        });
+        applyFilter = new Button("Apply filters");
+        applyFilter.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+        applyFilter.addClickListener(e -> {
+            updateEntityList(Entity.PRESCRIPTION);
         });
 //        grid.addItemClickListener(e -> {
 //            if (e.getItem() != null) {
@@ -107,7 +114,7 @@ public class MainUI extends UI {
 //            }
 //        });
         filterToolbar = new HorizontalLayout(filterByDescription, filterByPriority,
-                filterByPatient, clearFiltersButton);
+                filterByPatient, applyFilter, clearFiltersButton);
         addEntityLayout = new HorizontalLayout(addPatientButton);
         filterToolbar.setSpacing(true);
         initEntityPage(Entity.PATIENT);
