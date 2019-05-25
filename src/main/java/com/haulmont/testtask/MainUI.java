@@ -9,27 +9,20 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import javafx.scene.control.Alert;
 
 import java.util.List;
 
 @Theme(ValoTheme.THEME_NAME)
 public class MainUI extends UI {
-    private Controller<Model, Patient> controller;
     private Grid grid;
     private TextField filterByDescription;
     private NativeSelect filterByPriority;
     private TextField filterByPatient;
     private Button clearFiltersButton;
-    private Button addEntityButton;
     HorizontalLayout headLayout;
     Button patientButton;
     Button doctorButton;
     Button prescriptionButton;
-    List<Patient> patients;
-    List<Doctor> doctors;
-    List<Prescription> prescription;
-    BeanItemContainer<Entity> container;
     Button addPatientButton;
     Button addDoctorButton;
     Button addPrescriptionButton;
@@ -56,21 +49,7 @@ public class MainUI extends UI {
         filterByDescription = new TextField("Filter by description...");
         filterByPriority = new NativeSelect("Select priority filter...");
         filterByPriority.addItems(PrioritySelect.values());
-//        filterByDescription.addTextChangeListener(e -> {
-////            updatePrescriptionList();
-//            updateEntityList(Entity.PRESCRIPTION);
-//        });
         filterByPatient = new TextField("Filter by patient");
-//        filterByPatient.addTextChangeListener(e -> {
-////            updatePrescriptionList();
-//            updateEntityList(Entity.PRESCRIPTION);
-//        });
-//        filterByPatient.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-//        filterByDescription.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-//        filterByPriority.addValueChangeListener(e -> {
-////            updatePrescriptionList();
-//            updateEntityList(Entity.PRESCRIPTION);
-//        });
         clearFiltersButton = new Button("Clear filters");
         clearFiltersButton.setStyleName(ValoTheme.BUTTON_DANGER);
         clearFiltersButton.addClickListener(e -> {
@@ -84,33 +63,6 @@ public class MainUI extends UI {
         applyFilter.addClickListener(e -> {
             updateEntityList(Entity.PRESCRIPTION);
         });
-//        grid.addItemClickListener(e -> {
-//            if (e.getItem() != null) {
-//                Entity entity = (Entity)((BeanItem)e.getItem()).getBean();
-//                if (entity instanceof Patient) {
-//                    NewPatientWindow entityWindow =
-//                            new NewPatientWindow(this, "Patient");
-//                    entityWindow.setPatient((Patient)entity);
-//                    entityWindow.setDeleteDisable(false);
-//                    entityWindow.setCreateNewForm(false);
-//                    addWindow(entityWindow);
-//                } else if (entity instanceof Doctor) {
-//                    NewDoctorWindow entityWindow =
-//                            new NewDoctorWindow(this, "Doctor");
-//                    entityWindow.setEntity((Doctor)entity);
-//                    entityWindow.setDeleteDisable(false);
-//                    entityWindow.setCreateNewForm(false);
-//                    addWindow(entityWindow);
-//                } else if (entity instanceof Prescription) {
-//                    NewPrescriptionWindow entityWindow =
-//                            new NewPrescriptionWindow(this, "Prescription");
-//                    entityWindow.setPrescription((Prescription) entity);
-//                    entityWindow.setDeleteDisable(false);
-//                    entityWindow.setCreateNewForm(false);
-//                    addWindow(entityWindow);
-//                }
-//            }
-//        });
         filterToolbar = new HorizontalLayout(filterByDescription, filterByPriority,
                 filterByPatient, applyFilter, clearFiltersButton);
         addEntityLayout = new HorizontalLayout(addPatientButton);
@@ -134,7 +86,6 @@ public class MainUI extends UI {
                 List<Patient> patients = patController.getAll();
                 BeanItemContainer<Patient> patContainer =
                         new BeanItemContainer<Patient>(Patient.class, patients);
-//                grid.removeAllColumns();
                 grid.setContainerDataSource(patContainer);
                 break;
             case Entity.DOCTOR :
@@ -142,20 +93,16 @@ public class MainUI extends UI {
                 List<Doctor> doctors = docController.getAll();
                 BeanItemContainer<Doctor> docContainer =
                         new BeanItemContainer<Doctor>(Doctor.class, doctors);
-//                grid.removeAllColumns();
                 grid.setContainerDataSource(docContainer);
                 break;
             case Entity.PRESCRIPTION :
                 Controller<PrescriptionModel, Prescription> prescController =
                         new Controller<>(new PrescriptionModel());
-//                Controller<PriorityModel, Priority> priorController = new Controller<>(new PriorityModel());
-//                Controller<PatientModel, Patient> patientController = new Controller<>(new PatientModel());
                 List<Prescription> prescriptions = prescController.getFiltered(filterByDescription.getValue(),
                         filterByPriority.getValue() == null ? null : filterByPriority.getValue().toString(),
                         filterByPatient.getValue());
                 BeanItemContainer<Prescription> prescContainer =
                         new BeanItemContainer<Prescription>(Prescription.class, prescriptions);
-//                grid.removeAllColumns();
                 grid.setContainerDataSource(prescContainer);
                 break;
             case Entity.DOCTOR_PRESCRIPTION_INFO :
@@ -168,38 +115,6 @@ public class MainUI extends UI {
                 break;
         }
     }
-
-//    public void updatePatientList() {
-//        Controller<PatientModel, Patient> patController = new Controller<>(new PatientModel());
-//        List<Patient> patients = patController.getAll();
-//        BeanItemContainer<Patient> container =
-//                new BeanItemContainer<Patient>(Patient.class, patients);
-//        grid.removeAllColumns();
-//        grid.setContainerDataSource(container);
-//    }
-//
-//    public void updateDoctorList() {
-//        Controller<DoctorModel, Doctor> docController = new Controller<>(new DoctorModel());
-//        List<Doctor> doctors = docController.getAll();
-//        BeanItemContainer<Doctor> container =
-//                new BeanItemContainer<Doctor>(Doctor.class, doctors);
-//        grid.removeAllColumns();
-//        grid.setContainerDataSource(container);
-//    }
-//
-//    synchronized public void updatePrescriptionList() {
-//        Controller<PrescriptionModel, Prescription> prescController =
-//                new Controller<>(new PrescriptionModel());
-//        Controller<PriorityModel, Priority> priorController = new Controller<>(new PriorityModel());
-//        Controller<PatientModel, Patient> patientController = new Controller<>(new PatientModel());
-//        List<Prescription> prescriptions = prescController.getFiltered(filterByDescription.getValue(),
-//                filterByPriority.getValue() == null ? null : filterByPriority.getValue().toString(),
-//                filterByPatient.getValue());
-//        BeanItemContainer<Prescription> container =
-//                new BeanItemContainer<Prescription>(Prescription.class, prescriptions);
-//        grid.removeAllColumns();
-//        grid.setContainerDataSource(container);
-//    }
 
     private void initHeadLayout() {
         headLayout = new HorizontalLayout();
@@ -224,7 +139,6 @@ public class MainUI extends UI {
                 addEntityLayout.removeAllComponents();
                 addEntityLayout.addComponents(addPatientButton, editPatientButton, delPatientButton);
                 filterToolbar.setVisible(false);
-//                updatePatientList();
                 updateEntityList(Entity.PATIENT);
                 break;
             case Entity.DOCTOR :
@@ -232,7 +146,6 @@ public class MainUI extends UI {
                 addEntityLayout.removeAllComponents();
                 addEntityLayout.addComponents(addDoctorButton, editDoctorButton, delDoctorButton, showDoctorStatisticsButton);
                 filterToolbar.setVisible(false);
-//                updateDoctorList();
                 updateEntityList(Entity.DOCTOR);
                 break;
             case Entity.PRESCRIPTION :
@@ -241,35 +154,10 @@ public class MainUI extends UI {
                 addEntityLayout.addComponents
                         (addPrescriptionButton, editPrescriptionButton, delPrescriptionButton);
                 filterToolbar.setVisible(true);
-//                updatePrescriptionList();
                 updateEntityList(Entity.PRESCRIPTION);
                 break;
         }
     }
-//
-//    private void initPatientPage() {
-//        changeDisableButton(patientButton);
-//        addEntityLayout.removeAllComponents();
-//        addEntityLayout.addComponent(addPatientButton);
-//        filterToolbar.setVisible(false);
-//        updatePatientList();
-//    }
-//
-//    private void initDoctorPage() {
-//        changeDisableButton(doctorButton);
-//        addEntityLayout.removeAllComponents();
-//        addEntityLayout.addComponent(addDoctorButton);
-//        filterToolbar.setVisible(false);
-//        updateDoctorList();
-//    }
-//
-//    private void initPrescriptionPage() {
-//        changeDisableButton(prescriptionButton);
-//        addEntityLayout.removeAllComponents();
-//        addEntityLayout.addComponent(addPrescriptionButton);
-//        filterToolbar.setVisible(true);
-//        updatePrescriptionList();
-//    }
 
     private void preInitAddEditDelButtons() {
         addPatientButton = new Button("Add");
@@ -292,17 +180,14 @@ public class MainUI extends UI {
                 new NewPrescriptionWindow(this, "Edit Prescription"), false);
         patientButton.addClickListener(e -> {
             changeDisableButton(patientButton);
-//            initPatientPage();
             initEntityPage(Entity.PATIENT);
         });
         doctorButton.addClickListener(e -> {
             changeDisableButton(doctorButton);
-//            initDoctorPage();
             initEntityPage(Entity.DOCTOR);
         });
         prescriptionButton.addClickListener(e -> {
             changeDisableButton(prescriptionButton);
-//            initPrescriptionPage();
             initEntityPage(Entity.PRESCRIPTION);
         });
         delPatientButton = new Button("Delete");
@@ -375,7 +260,6 @@ public class MainUI extends UI {
 
     private void createAddOrEditButtonAndWindow
             (Button button, NewEntityWindow window, boolean isNewEntity) {
-//        button = new Button("Add patient button");
         button.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         button.addClickListener(e -> {
             if (!isNewEntity) {
@@ -402,67 +286,10 @@ public class MainUI extends UI {
                 }
             }
             grid.deselectAll();
-//            NewPatientWindow window =
-//                    new NewPatientWindow(this, "New patient");
             window.setCreateNewForm(isNewEntity);
             addWindow(window);
         });
     }
-//
-//    private void preInitAddEditDelButtons() {
-//        addPatientButton = new Button("Add patient button");
-//        addPatientButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-//        addPatientButton.addClickListener(e -> {
-//            grid.deselectAll();
-//            NewPatientWindow entityWindow =
-//                    new NewPatientWindow(this, "New patient");
-//            entityWindow.setDeleteDisable(true);
-//            entityWindow.setCreateNewForm(true);
-//            addWindow(entityWindow);
-//        });
-//        editPatientButton = new Button("Edit patient button");
-//        editPatientButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-//        editPatientButton.addClickListener(e -> {
-//            grid.deselectAll();
-//            NewPatientWindow entityWindow =
-//                    new NewPatientWindow(this, "Patient");
-//            entityWindow.setDeleteDisable(true);
-//            entityWindow.setCreateNewForm(false);
-//            addWindow(entityWindow);
-//        });
-//        addDoctorButton = new Button("Add doctor button");
-//        addDoctorButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-//        addDoctorButton.addClickListener(e -> {
-//            grid.deselectAll();
-//            NewDoctorWindow entityWindow =
-//                    new NewDoctorWindow(this, "New doctor");
-//            entityWindow.setDeleteDisable(true);
-//            entityWindow.setCreateNewForm(true);
-//            addWindow(entityWindow);
-//        });
-//        addPrescriptionButton = new Button("Add prescription button");
-//        addPrescriptionButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-//        addPrescriptionButton.addClickListener(e -> {
-//            grid.deselectAll();
-//            NewPrescriptionWindow entityWindow =
-//                    new NewPrescriptionWindow(this, "New prescription");
-//            entityWindow.setDeleteDisable(true);
-//            entityWindow.setCreateNewForm(true);
-//            addWindow(entityWindow);
-//        });
-//        patientButton.addClickListener(e -> {
-//            changeDisableButton(patientButton);
-//            initPatientPage();
-//        });
-//        doctorButton.addClickListener(e -> {
-//            changeDisableButton(doctorButton);
-//            initDoctorPage();
-//        });
-//        prescriptionButton.addClickListener(e -> {
-//            changeDisableButton(prescriptionButton);
-//            initPrescriptionPage();
-//        });
-//    }
 
     private void changeDisableButton(Button button) {
         patientButton.setEnabled(true);

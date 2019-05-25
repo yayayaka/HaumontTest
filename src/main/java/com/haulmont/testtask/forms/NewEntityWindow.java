@@ -10,10 +10,6 @@ public class NewEntityWindow extends Window {
         super(caption);
     }
 
-//    public void setDeleteDisable(boolean boo) {
-//        throw new NotImplementedException();
-//    }
-
     public void setCreateNewForm(boolean boo) {
         throw new NotImplementedException();
     }

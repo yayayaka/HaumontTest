@@ -51,10 +51,6 @@ public class NewDoctorWindow extends NewEntityWindow {
         cancel.addClickListener(e -> this.cancel());
     }
 
-//    public void setDeleteDisable(boolean boo) {
-//        delete.setVisible(!boo);
-//    }
-
     public void setCreateNewForm(boolean boo) {
         isNewForm = boo;
     }
@@ -70,9 +66,6 @@ public class NewDoctorWindow extends NewEntityWindow {
     }
 
     private void cancel() {
-//        controller.deleteOne(doctor.getId());
-//        mainUI.updateDoctorList();
-//        mainUI.updateEntityList(Entity.DOCTOR);
         this.close();
     }
 
@@ -86,7 +79,6 @@ public class NewDoctorWindow extends NewEntityWindow {
                     middleName.getValue(), specialization.getValue());
             controller.updateOne(doctor);
         }
-//        mainUI.updateDoctorList();
         mainUI.updateEntityList(Entity.DOCTOR);
         this.close();
     }

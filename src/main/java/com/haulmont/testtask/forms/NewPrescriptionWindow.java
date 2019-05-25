@@ -122,34 +122,18 @@ public class NewPrescriptionWindow extends NewEntityWindow {
             doctor.select(prescription.getDoctor());
             priority.select(prescription.getPriority());
         }
-//        patient.setValue(prescription.getPatient().getSecname() + prescription.getPatient().getName() +
-//                prescription.getPatient().getOtch());
-//        doctor.setValue(prescription.getDoctor().getSecname() + prescription.getDoctor().getName() +
-//                prescription.getDoctor().getOtch());
-//        doctor.addItems(doctorController.getAll());
         creationDate.setValue(Date.valueOf(prescription.getCreateDate()));
         expireDate.setValue(Date.valueOf(prescription.getExpireDate()));
         description.selectAll();
     }
 
     private void cancel() {
-//        prescrController.deleteOne(prescription.getId());
-//        mainUI.updatePrescriptionList();
-//        mainUI.updateEntityList(Entity.PRESCRIPTION);
         this.close();
     }
 
     private void save() {
         if (isNewForm) {
             try {
-//                String[] patFIO = ((String)patient.getValue()).split(" ");
-//                Patient selectedPatient = patientController.searchByFields(
-//                        new Patient(-1, patFIO[1], patFIO[0], patFIO[2], -1));
-//                String[] docFIO = ((String)doctor.getValue()).split(" ");
-//                Doctor selectedDoctor = doctorController.searchByFields(
-//                        new Doctor(-1, docFIO[1], docFIO[0], docFIO[2], "")) ;
-//                Priority selectedPriority = priorityController.searchByFields(new Priority(-1,
-//                        (PrioritySelect) priority.getValue()));
                 prescription = new Prescription(-1, description.getValue(),
                         (Patient) patient.getValue(),
                         (Doctor) doctor.getValue(),
@@ -157,9 +141,6 @@ public class NewPrescriptionWindow extends NewEntityWindow {
                         ((java.util.Date)expireDate.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                         (Priority) priority.getValue());
                 prescrController.addOne(prescription);
-//                prescription = new Prescription(-1, description.getValue(), patientController.,
-//                        middleName.getValue(), Integer.valueOf(phone.getValue()));
-//                prescrController.addOne(prescription);
             } catch (NumberFormatException e) {
                 Window alertWindow = new Window("Warning");
                 alertWindow.setResizable(false);
@@ -174,11 +155,7 @@ public class NewPrescriptionWindow extends NewEntityWindow {
                     ((Date)expireDate.getValue()).toLocalDate(),
                     (Priority)priority.getValue());
             prescrController.updateOne(prescription);
-//            prescription = new Patient(prescription.getId(), description.getValue(), lastName.getValue(),
-//                    middleName.getValue(), Integer.valueOf(phone.getValue()));
-//            prescrController.updateOne(prescription);
         }
-//        mainUI.updatePrescriptionList();
         mainUI.updateEntityList(Entity.PRESCRIPTION);
         this.close();
     }

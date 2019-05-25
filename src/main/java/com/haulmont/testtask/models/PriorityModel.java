@@ -2,7 +2,6 @@ package com.haulmont.testtask.models;
 
 import com.haulmont.testtask.dbconnection.ConnectorDB;
 import com.haulmont.testtask.entities.DoctorPrescrInfo;
-import com.haulmont.testtask.entities.Patient;
 import com.haulmont.testtask.entities.Priority;
 import com.haulmont.testtask.entities.PrioritySelect;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;

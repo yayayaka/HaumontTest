@@ -107,9 +107,7 @@ public class PrescriptionModel implements Model<Prescription> {
 
     @Override
     public ArrayList<Prescription> getFiltered(String descriptionFilter,
-//                                              Priority priorityFilter,
                                                String priorityFilter,
-//                                              Patient patientFilter) {
                                               String patientFilter) {
         ArrayList<Prescription> filteredPrescriptions = new ArrayList<>();
         Prescription currentPrescription;
@@ -120,16 +118,6 @@ public class PrescriptionModel implements Model<Prescription> {
         Patient currentPatient;
         Doctor currentDoctor;
         Priority currentPriority;
-//        id BIGINT NOT NULL PRIMARY KEY IDENTITY,
-//                description VARCHAR(20) DEFAULT 'NONE', -- описание
-//        patient_id BIGINT NOT NULL FOREIGN KEY REFERENCES Patient(id)
-//                ON UPDATE RESTRICT ON DELETE RESTRICT,
-//                doc_id BIGINT NOT NULL FOREIGN KEY REFERENCES Doctor(id)
-//        ON UPDATE RESTRICT ON DELETE RESTRICT,
-//        creation_date DATE NOT NULL,
-//        expire_date DATE NOT NULL,
-//        priority BIGINT NOT NULL FOREIGN KEY REFERENCES Prescr_priority(id)
-//                ON UPDATE RESTRICT ON DELETE RESTRICT
         try(ConnectorDB connector = new ConnectorDB()) {
             Connection conn = connector.getConnection();
             PreparedStatement statement = conn.prepareStatement("SELECT Prescription.id, " +
@@ -139,14 +127,14 @@ public class PrescriptionModel implements Model<Prescription> {
                     "(Prescription.priority = Prescr_priority.id) AND " +
                     "(description LIKE ?) AND " +
                     "(prior_name LIKE ?) AND " +
-//                    "((Patient.pat_name LIKE ?) OR " +
-                    "(Patient.pat_secname LIKE ?)");//" OR ");// +
-//                    "(Patient.pat_otch LIKE ?)) ");
+                    "((Patient.pat_secname LIKE ?) OR " +
+                    "(Patient.pat_name LIKE ?) OR " +
+                    "(Patient.pat_otch LIKE ?)) ");
             statement.setString(1, descriptionFilter == null ? "%" : "%" + descriptionFilter + "%");
             statement.setString(2, priorityFilter == null ? "%" : "%" + priorityFilter + "%");
             statement.setString(3, patientFilter == null ? "%" : "%" + patientFilter + "%");
-//            statement.setString(4, patientFilter == null ? "%" : "%" + patientFilter + "%");
-//            statement.setString(5, patientFilter == null ? "%" : "%" + patientFilter + "%");
+            statement.setString(4, patientFilter == null ? "%" : "%" + patientFilter + "%");
+            statement.setString(5, patientFilter == null ? "%" : "%" + patientFilter + "%");
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
