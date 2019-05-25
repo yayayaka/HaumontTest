@@ -1,14 +1,14 @@
 package com.haulmont.testtask.models;
 
 import com.haulmont.testtask.dbconnection.ConnectorDB;
+import com.haulmont.testtask.entities.DoctorPrescrInfo;
 import com.haulmont.testtask.entities.Patient;
 import com.haulmont.testtask.entities.Priority;
+import com.haulmont.testtask.entities.PrioritySelect;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PriorityModel implements Model<Priority> {
@@ -19,7 +19,7 @@ public class PriorityModel implements Model<Priority> {
             Connection conn = connector.getConnection();
             PreparedStatement statement = conn.prepareStatement("SELECT id FROM Prescr_priority " +
                     "WHERE prior_name = ?");
-            statement.setString(1, priority.name());
+            statement.setString(1, priority.getPriorityName().name());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 result = resultSet.getLong(1);
@@ -36,13 +36,13 @@ public class PriorityModel implements Model<Priority> {
         String priorityName;
         try(ConnectorDB connector = new ConnectorDB()) {
             Connection conn = connector.getConnection();
-            PreparedStatement statement = conn.prepareStatement("SELECT prior_name FROM Priority " +
+            PreparedStatement statement = conn.prepareStatement("SELECT prior_name FROM Prescr_priority " +
                     "WHERE id = ?");
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 priorityName = resultSet.getString(1);
-                return Priority.valueOf(priorityName);
+                return new Priority(id, PrioritySelect.valueOf(priorityName));
             } else
                 return null;
         } catch (SQLException e) {
@@ -52,12 +52,46 @@ public class PriorityModel implements Model<Priority> {
 
     @Override
     public Priority searchByFields(Priority entity) {
+        try(ConnectorDB connector = new ConnectorDB()) {
+            Connection conn = connector.getConnection();
+            PreparedStatement statement = conn.prepareStatement("SELECT id FROM Prescr_priority " +
+                    "WHERE (prior_name LIKE ?)");
+            if (entity.getPriorityName() == null) {
+                statement.setString(1, "%");
+            } else {
+                statement.setString(1, entity.getPriorityName().name());
+            }
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new Priority(resultSet.getLong(1),
+                        entity.getPriorityName());
+            } else
+                return null;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<DoctorPrescrInfo> getDocPrescInfo() {
         throw new NotImplementedException();
     }
 
     @Override
     public List<Priority> getAll() {
-        throw new NotImplementedException();
+        ArrayList<Priority> priorities = new ArrayList<>();
+        try(ConnectorDB connector = new ConnectorDB()) {
+            Connection conn = connector.getConnection();
+            Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Prescr_priority ");
+            while (resultSet.next()) {
+                priorities.add(new Priority(resultSet.getLong(1),
+                        PrioritySelect.valueOf(resultSet.getString(2))));
+            }
+            return priorities;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     @Override
@@ -76,7 +110,7 @@ public class PriorityModel implements Model<Priority> {
     }
 
     @Override
-    public List<Priority> getFiltered(String descriptionFilter, Priority priorityFilter, Patient patientFilter) {
+    public List<Priority> getFiltered(String descriptionFilter, String priorityFilter, String patientFilter) {
         throw new NotImplementedException();
     }
 }

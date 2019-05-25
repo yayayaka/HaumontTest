@@ -47,6 +47,6 @@ CREATE TABLE Prescription -- рецепт
         ON UPDATE RESTRICT ON DELETE RESTRICT,
     creation_date DATE NOT NULL,
     expire_date DATE NOT NULL,
-    priority BIGINT NOT NULL FOREIGN KEY REFERENCES Prescr_priority(id) 
+    priority BIGINT NOT NULL FOREIGN KEY REFERENCES Prescr_priority(id)
         ON UPDATE RESTRICT ON DELETE RESTRICT
 );

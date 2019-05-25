@@ -1,7 +1,8 @@
 package com.haulmont.testtask.entities;
 
+import com.google.common.base.Objects;
+
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Prescription implements Entity { // рецепт
     private long id;
@@ -77,5 +78,25 @@ public class Prescription implements Entity { // рецепт
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(description, patient, doctor,
+                createDate, expireDate, priority);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Prescription other = (Prescription) obj;
+        return Objects.equal(description, other.getDescription())
+                && Objects.equal(patient, other.getPatient())
+                && Objects.equal(doctor, other.getDoctor())
+                && Objects.equal(createDate, other.getCreateDate())
+                && Objects.equal(expireDate, other.getExpireDate())
+                && Objects.equal(priority, other.getPriority());
     }
 }

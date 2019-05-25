@@ -2,6 +2,7 @@ package com.haulmont.testtask.forms;
 
 import com.haulmont.testtask.MainUI;
 import com.haulmont.testtask.controllers.Controller;
+import com.haulmont.testtask.entities.Entity;
 import com.haulmont.testtask.entities.Patient;
 import com.haulmont.testtask.models.PatientModel;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -10,14 +11,14 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class NewPatientWindow extends Window {
+public class NewPatientWindow extends NewEntityWindow {
     private FormLayout layout = new FormLayout();
     private TextField firstName = new TextField("First name");
     private TextField lastName = new TextField("Last name");
     private TextField middleName = new TextField("Middle name");
     private TextField phone = new TextField("Phone No");
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private Button save = new Button("OK");
+    private Button cancel = new Button("Cancel");
     private boolean isNewForm = false;
 
     private Controller<PatientModel, Patient> controller =
@@ -29,7 +30,7 @@ public class NewPatientWindow extends Window {
 //    FieldGroup group = new FieldGroup();
 
     public NewPatientWindow(MainUI mainUI, String caption) {
-        super(caption);
+        super(mainUI, caption);
 //        binder.setItemDataSource(patient);
         this.mainUI = mainUI;
         setModal(true);
@@ -37,7 +38,7 @@ public class NewPatientWindow extends Window {
         center();
         layout.setMargin(true);
         setSizeUndefined();
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
+        HorizontalLayout buttons = new HorizontalLayout(save, cancel);
         layout.addComponents(firstName, lastName, middleName, phone, buttons);
         setContent(layout);
 
@@ -48,18 +49,19 @@ public class NewPatientWindow extends Window {
 //        binder.bindMemberFields(this);
 
         save.addClickListener(e -> this.save());
-        delete.addClickListener(e -> this.delete());
+        cancel.addClickListener(e -> this.cancel());
     }
 
-    public void setDeleteDisable(boolean boo) {
-        delete.setVisible(!boo);
-    }
+//    public void setDeleteDisable(boolean boo) {
+//        delete.setVisible(!boo);
+//    }
 
     public void setCreateNewForm(boolean boo) {
         isNewForm = boo;
     }
 
-    public void setPatient(Patient patient) {
+    public void setEntity(Entity entity) {
+        Patient patient = (Patient)entity;
         this.patient = patient;
 //        binder.setBean(patient);
 //        binder.setItemDataSource(patient);
@@ -70,9 +72,7 @@ public class NewPatientWindow extends Window {
         firstName.selectAll();
     }
 
-    private void delete() {
-        controller.deleteOne(patient.getId());
-        mainUI.updatePatientList();
+    private void cancel() {
         this.close();
     }
 
@@ -94,7 +94,8 @@ public class NewPatientWindow extends Window {
                     middleName.getValue(), Integer.valueOf(phone.getValue()));
             controller.updateOne(patient);
         }
-        mainUI.updatePatientList();
+//        mainUI.updatePatientList();
+        mainUI.updateEntityList(Entity.PATIENT);
         this.close();
     }
 }

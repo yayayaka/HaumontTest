@@ -1,10 +1,7 @@
 package com.haulmont.testtask.models;
 
 import com.haulmont.testtask.dbconnection.ConnectorDB;
-import com.haulmont.testtask.entities.Doctor;
-import com.haulmont.testtask.entities.DoctorPrescrInfo;
-import com.haulmont.testtask.entities.Patient;
-import com.haulmont.testtask.entities.Priority;
+import com.haulmont.testtask.entities.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.*;
@@ -111,7 +108,7 @@ public class DoctorModel implements Model<Doctor>{
     }
 
     @Override
-    public List<Doctor> getFiltered(String descriptionFilter, Priority entityFilter1, Patient entityFilter2) {
+    public List<Doctor> getFiltered(String descriptionFilter, String entityFilter1, String entityFilter2) {
         throw new NotImplementedException();
     }
 

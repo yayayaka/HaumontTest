@@ -1,5 +1,7 @@
 package com.haulmont.testtask.entities;
 
+import com.google.common.base.Objects;
+
 public class Doctor implements Entity {
     private long id;
     private String name;
@@ -58,5 +60,22 @@ public class Doctor implements Entity {
     @Override
     public String toString() {
         return String.format("%s %s.%s.", secname, name.charAt(0), otch.charAt(0));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name, secname, otch, spec);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Doctor other = (Doctor) obj;
+        return Objects.equal(name, other.getName())
+                && Objects.equal(secname, other.getSecname())
+                && Objects.equal(otch, other.getOtch())
+                && Objects.equal(spec, other.getSpec());
     }
 }

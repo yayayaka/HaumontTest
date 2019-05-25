@@ -3,19 +3,20 @@ package com.haulmont.testtask.forms;
 import com.haulmont.testtask.MainUI;
 import com.haulmont.testtask.controllers.Controller;
 import com.haulmont.testtask.entities.Doctor;
+import com.haulmont.testtask.entities.Entity;
 import com.haulmont.testtask.models.DoctorModel;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class NewDoctorWindow extends Window {
+public class NewDoctorWindow extends NewEntityWindow {
     private FormLayout layout = new FormLayout();
     private TextField firstName = new TextField("First name");
     private TextField lastName = new TextField("Last name");
     private TextField middleName = new TextField("Middle name");
     private TextField specialization = new TextField("Specialization");
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private Button save = new Button("OK");
+    private Button cancel = new Button("Cancel");
     private boolean isNewForm = false;
 
     private Controller<DoctorModel, Doctor> controller = new Controller<>(new DoctorModel());
@@ -23,14 +24,14 @@ public class NewDoctorWindow extends Window {
     private MainUI mainUI;
 
     public NewDoctorWindow(MainUI mainUI, String caption) {
-        super(caption);
+        super(mainUI, caption);
         this.mainUI = mainUI;
         setModal(true);
         setResizable(false);
         center();
         layout.setMargin(true);
         setSizeUndefined();
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
+        HorizontalLayout buttons = new HorizontalLayout(save, cancel);
         layout.addComponents(firstName, lastName, middleName, specialization, buttons);
         setContent(layout);
 
@@ -38,18 +39,19 @@ public class NewDoctorWindow extends Window {
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
         save.addClickListener(e -> this.save());
-        delete.addClickListener(e -> this.delete());
+        cancel.addClickListener(e -> this.cancel());
     }
 
-    public void setDeleteDisable(boolean boo) {
-        delete.setVisible(!boo);
-    }
+//    public void setDeleteDisable(boolean boo) {
+//        delete.setVisible(!boo);
+//    }
 
     public void setCreateNewForm(boolean boo) {
         isNewForm = boo;
     }
 
-    public void setDoctor(Doctor doctor) {
+    public void setEntity(Entity entity) {
+        Doctor doctor = (Doctor)entity;
         this.doctor = doctor;
         firstName.setValue(doctor.getName());
         lastName.setValue(doctor.getSecname());
@@ -58,9 +60,10 @@ public class NewDoctorWindow extends Window {
         firstName.selectAll();
     }
 
-    private void delete() {
-        controller.deleteOne(doctor.getId());
-        mainUI.updateDoctorList();
+    private void cancel() {
+//        controller.deleteOne(doctor.getId());
+//        mainUI.updateDoctorList();
+//        mainUI.updateEntityList(Entity.DOCTOR);
         this.close();
     }
 
@@ -74,7 +77,8 @@ public class NewDoctorWindow extends Window {
                     middleName.getValue(), specialization.getValue());
             controller.updateOne(doctor);
         }
-        mainUI.updateDoctorList();
+//        mainUI.updateDoctorList();
+        mainUI.updateEntityList(Entity.DOCTOR);
         this.close();
     }
 }

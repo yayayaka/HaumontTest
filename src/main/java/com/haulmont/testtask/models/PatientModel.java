@@ -1,9 +1,10 @@
 package com.haulmont.testtask.models;
 
 import com.haulmont.testtask.dbconnection.ConnectorDB;
+import com.haulmont.testtask.entities.DoctorPrescrInfo;
 import com.haulmont.testtask.entities.Patient;
-import com.haulmont.testtask.entities.Prescription;
 import com.haulmont.testtask.entities.Priority;
+import com.haulmont.testtask.entities.PrioritySelect;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.*;
@@ -110,7 +111,7 @@ public class PatientModel implements Model<Patient> {
     }
 
     @Override
-    public List<Patient> getFiltered(String descriptionFilter, Priority entityFilter1, Patient entityFilter2) {
+    public List<Patient> getFiltered(String descriptionFilter, String entityFilter1, String entityFilter2) {
         throw new NotImplementedException();
     }
 
@@ -182,5 +183,10 @@ public class PatientModel implements Model<Patient> {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    @Override
+    public ArrayList<DoctorPrescrInfo> getDocPrescInfo() {
+        throw new NotImplementedException();
     }
 }

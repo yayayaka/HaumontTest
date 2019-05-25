@@ -1,10 +1,9 @@
 package com.haulmont.testtask.controllers;
 
-import com.haulmont.testtask.entities.Entity;
-import com.haulmont.testtask.entities.Patient;
-import com.haulmont.testtask.entities.Priority;
+import com.haulmont.testtask.entities.*;
 import com.haulmont.testtask.models.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Controller<T extends Model, K extends Entity> {
@@ -31,8 +30,8 @@ public class Controller<T extends Model, K extends Entity> {
     }
 
     public List<K> getFiltered(String descriptionFilter,
-                        Priority priorityFilter,
-                        Patient patientFilter) {
+                        String priorityFilter,
+                        String patientFilter) {
         return model.getFiltered(descriptionFilter,
                 priorityFilter,
                 patientFilter);
@@ -52,5 +51,9 @@ public class Controller<T extends Model, K extends Entity> {
 
     public K searchByFields(K entity) {
         return (K)model.searchByFields(entity);
+    }
+
+    public ArrayList<DoctorPrescrInfo> getDocPrescInfo() {
+        return model.getDocPrescInfo();
     }
 }
