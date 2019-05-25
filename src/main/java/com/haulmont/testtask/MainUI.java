@@ -14,6 +14,22 @@ import java.util.List;
 
 @Theme(ValoTheme.THEME_NAME)
 public class MainUI extends UI {
+    private String FILTER_BY_DESCRIPTION = "Filter by description...";
+    private String FILTER_BY_PRIORITY = "Select priority filter...";
+    private String FILTER_BY_PATIENT = "Filter by patient...";
+    private String CLEAR_FILTERS_BUTTON = "Clear filters";
+    private String APPLY_FILTERS = "Apply filters";
+    private String ADD = "Add";
+    private String EDIT = "Edit";
+    private String DELETE = "Delete";
+    private String NEW_PATIENT = "New patient";
+    private String NEW_DOCTOR = "New doctor";
+    private String NEW_PRESCRIPTION = "New prescription";
+    private String EDIT_PATIENT = "Edit patient";
+    private String EDIT_DOCTOR = "Edit doctor";
+    private String EDIT_PRESCRIPTION = "Edit prescription";
+    private String SHOW_STATISTICS = "Show statistics";
+    private String HIDE_STATISTICS = "Hide statistics";
     private Grid grid;
     private TextField filterByDescription;
     private NativeSelect filterByPriority;
@@ -46,11 +62,11 @@ public class MainUI extends UI {
         grid = new Grid();
         preInitAddEditDelButtons();
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        filterByDescription = new TextField("Filter by description...");
-        filterByPriority = new NativeSelect("Select priority filter...");
+        filterByDescription = new TextField(FILTER_BY_DESCRIPTION);
+        filterByPriority = new NativeSelect(FILTER_BY_PRIORITY);
         filterByPriority.addItems(PrioritySelect.values());
-        filterByPatient = new TextField("Filter by patient");
-        clearFiltersButton = new Button("Clear filters");
+        filterByPatient = new TextField(FILTER_BY_PATIENT);
+        clearFiltersButton = new Button(CLEAR_FILTERS_BUTTON);
         clearFiltersButton.setStyleName(ValoTheme.BUTTON_DANGER);
         clearFiltersButton.addClickListener(e -> {
             filterByDescription.clear();
@@ -58,7 +74,7 @@ public class MainUI extends UI {
             filterByPatient.clear();
             updateEntityList(Entity.PRESCRIPTION);
         });
-        applyFilter = new Button("Apply filters");
+        applyFilter = new Button(APPLY_FILTERS);
         applyFilter.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         applyFilter.addClickListener(e -> {
             updateEntityList(Entity.PRESCRIPTION);
@@ -98,7 +114,8 @@ public class MainUI extends UI {
             case Entity.PRESCRIPTION :
                 Controller<PrescriptionModel, Prescription> prescController =
                         new Controller<>(new PrescriptionModel());
-                List<Prescription> prescriptions = prescController.getFiltered(filterByDescription.getValue(),
+                List<Prescription> prescriptions =
+                        prescController.getFiltered(filterByDescription.getValue(),
                         filterByPriority.getValue() == null ? null : filterByPriority.getValue().toString(),
                         filterByPatient.getValue());
                 BeanItemContainer<Prescription> prescContainer =
@@ -118,9 +135,9 @@ public class MainUI extends UI {
 
     private void initHeadLayout() {
         headLayout = new HorizontalLayout();
-        patientButton = new Button("Patients");
-        doctorButton = new Button("Doctors");
-        prescriptionButton = new Button("Prescriptions");
+        patientButton = new Button(Entity.PATIENTS);
+        doctorButton = new Button(Entity.DOCTORS);
+        prescriptionButton = new Button(Entity.PRESCRIPTIONS);
         patientButton.setSizeFull();
         doctorButton.setSizeFull();
         prescriptionButton.setSizeFull();
@@ -160,24 +177,24 @@ public class MainUI extends UI {
     }
 
     private void preInitAddEditDelButtons() {
-        addPatientButton = new Button("Add");
+        addPatientButton = new Button(ADD);
         createAddOrEditButtonAndWindow(addPatientButton,
-                new NewPatientWindow(this, "New Patient"), true);
-        addDoctorButton = new Button("Add");
+                new NewPatientWindow(this, NEW_PATIENT), true);
+        addDoctorButton = new Button(ADD);
         createAddOrEditButtonAndWindow(addDoctorButton,
-                new NewDoctorWindow(this, "New Doctor"), true);
-        addPrescriptionButton = new Button("Add");
+                new NewDoctorWindow(this, NEW_DOCTOR), true);
+        addPrescriptionButton = new Button(ADD);
         createAddOrEditButtonAndWindow(addPrescriptionButton,
-                new NewPrescriptionWindow(this, "New Prescription"), true);
-        editPatientButton = new Button("Edit");
+                new NewPrescriptionWindow(this, NEW_PRESCRIPTION), true);
+        editPatientButton = new Button(EDIT);
         createAddOrEditButtonAndWindow(editPatientButton,
-                new NewPatientWindow(this, "Edit Patient"), false);
-        editDoctorButton = new Button("Edit");
+                new NewPatientWindow(this, EDIT_PATIENT), false);
+        editDoctorButton = new Button(EDIT);
         createAddOrEditButtonAndWindow(editDoctorButton,
-                new NewDoctorWindow(this, "Edit Doctor"), false);
-        editPrescriptionButton = new Button("Edit");
+                new NewDoctorWindow(this, EDIT_DOCTOR), false);
+        editPrescriptionButton = new Button(EDIT);
         createAddOrEditButtonAndWindow(editPrescriptionButton,
-                new NewPrescriptionWindow(this, "Edit Prescription"), false);
+                new NewPrescriptionWindow(this, EDIT_PRESCRIPTION), false);
         patientButton.addClickListener(e -> {
             changeDisableButton(patientButton);
             initEntityPage(Entity.PATIENT);
@@ -190,7 +207,7 @@ public class MainUI extends UI {
             changeDisableButton(prescriptionButton);
             initEntityPage(Entity.PRESCRIPTION);
         });
-        delPatientButton = new Button("Delete");
+        delPatientButton = new Button(DELETE);
         delPatientButton.setStyleName(ValoTheme.BUTTON_DANGER);
         delPatientButton.addClickListener(e -> {
             Controller<PatientModel, Patient> controller =
@@ -209,7 +226,7 @@ public class MainUI extends UI {
                 addWindow(alertWindow);
             }
         });
-        delDoctorButton = new Button("Delete");
+        delDoctorButton = new Button(DELETE);
         delDoctorButton.setStyleName(ValoTheme.BUTTON_DANGER);
         delDoctorButton.addClickListener(e -> {
             Controller<DoctorModel, Doctor> controller =
@@ -228,7 +245,7 @@ public class MainUI extends UI {
                 addWindow(alertWindow);
             }
         });
-        delPrescriptionButton = new Button("Delete");
+        delPrescriptionButton = new Button(DELETE);
         delPrescriptionButton.setStyleName(ValoTheme.BUTTON_DANGER);
         delPrescriptionButton.addClickListener(e -> {
             Controller<PrescriptionModel, Prescription> controller =
@@ -242,14 +259,14 @@ public class MainUI extends UI {
                 addWindow(alertWindow);
             }
         });
-        showDoctorStatisticsButton = new Button("Show statistic");
+        showDoctorStatisticsButton = new Button(SHOW_STATISTICS);
         showDoctorStatisticsButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         showDoctorStatisticsButton.addClickListener(e -> {
             addEntityLayout.removeComponent(showDoctorStatisticsButton);
             addEntityLayout.addComponent(hideDoctorStatisticsButton);
             updateEntityList(Entity.DOCTOR_PRESCRIPTION_INFO);
         });
-        hideDoctorStatisticsButton = new Button("Hide statistic");
+        hideDoctorStatisticsButton = new Button(HIDE_STATISTICS);
         hideDoctorStatisticsButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         hideDoctorStatisticsButton.addClickListener(e -> {
             addEntityLayout.removeComponent(hideDoctorStatisticsButton);

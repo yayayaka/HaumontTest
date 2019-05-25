@@ -77,10 +77,7 @@ public class NewPatientWindow extends NewEntityWindow {
                         middleName.getValue(), Integer.valueOf(phone.getValue()));
                 controller.addOne(patient);
             } catch (NumberFormatException e) {
-                Window alertWindow = new Window("Warning");
-                alertWindow.setResizable(false);
-                alertWindow.setModal(true);
-                alertWindow.setContent(new Label("Invalid phone value"));
+                AlertWindow alertWindow = new AlertWindow("Invalid phone value");
                 mainUI.addWindow(alertWindow);
             }
         } else {
