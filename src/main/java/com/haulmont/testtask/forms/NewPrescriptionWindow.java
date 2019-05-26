@@ -7,8 +7,6 @@ import com.haulmont.testtask.models.DoctorModel;
 import com.haulmont.testtask.models.PatientModel;
 import com.haulmont.testtask.models.PrescriptionModel;
 import com.haulmont.testtask.models.PriorityModel;
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.NullValidator;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -17,10 +15,8 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import javax.print.Doc;
 import java.sql.Date;
 import java.time.ZoneId;
-import java.util.ArrayList;
 
 public class NewPrescriptionWindow extends NewEntityWindow {
     private FormLayout layout = new FormLayout();
@@ -44,8 +40,6 @@ public class NewPrescriptionWindow extends NewEntityWindow {
             new Controller<>(new PriorityModel());
     private Prescription prescription;
     private MainUI mainUI;
-//    private Binder<Patient> binder = new Binder<>(Patient.class);
-//    BeanFieldGroup<Patient> binder = new BeanFieldGroup<>(Patient.class);
 
     public NewPrescriptionWindow(MainUI mainUI, String caption) {
         super(mainUI, caption);
@@ -73,21 +67,7 @@ public class NewPrescriptionWindow extends NewEntityWindow {
         HorizontalLayout buttons = new HorizontalLayout(save, cancel);
         layout.addComponents(description, patient, doctor, creationDate,
                 expireDate, priority, buttons);
-//        ArrayList<String> patientsFIOs = new ArrayList<>();
-//        for (Patient patientItem : patientController.getAll()) {
-//            patientsFIOs.add(patientItem.getSecname() + " " +
-//                    patientItem.getName() + " " +
-//                    patientItem.getOtch());
-//        }
-//        patient.addItems(patientsFIOs);
         patient.addItems(patientController.getAll());
-//        ArrayList<String> docFIOs = new ArrayList<>();
-//        for (Doctor docItem : doctorController.getAll()) {
-//            docFIOs.add(docItem.getSecname() + " " +
-//                    docItem.getName() + " " +
-//                    docItem.getOtch());
-//        }
-//        doctor.addItems(docFIOs);
         doctor.addItems(doctorController.getAll());
         priority.addItems(priorityController.getAll());
 
@@ -97,25 +77,31 @@ public class NewPrescriptionWindow extends NewEntityWindow {
         save.setStyleName(ValoTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
-//        binder.bindInstanceFields(this);
-//        binder.bindMemberFields(this);
-
         save.addClickListener(e -> this.save());
         cancel.addClickListener(e -> this.cancel());
     }
-
-//    public void setDeleteDisable(boolean boo) {
-//        delete.setVisible(!boo);
-//    }
 
     public void setCreateNewForm(boolean boo) {
         isNewForm = boo;
     }
 
+    @Override
+    public boolean isNewForm() {
+        return isNewForm;
+    }
+
     public void setEntity(Entity entity) {
+        if (entity == null) {
+            description.setValue("");
+            patient.select(null);
+            doctor.select(null);
+            creationDate.setValue(null);
+            expireDate.setValue(null);
+            priority.select(null);
+            return;
+        }
         Prescription prescription = (Prescription) entity;
         this.prescription = prescription;
-//        binder.setBean(prescription);
         description.setValue(prescription.getDescription());
         if (!isNewForm) {
             patient.select(prescription.getPatient());

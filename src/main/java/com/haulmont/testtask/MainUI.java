@@ -94,6 +94,7 @@ public class MainUI extends UI {
         setContent(layout);
     }
 
+    // Обновление грида
     public void updateEntityList(String entity) {
         grid.removeAllColumns();
         switch (entity) {
@@ -133,6 +134,7 @@ public class MainUI extends UI {
         }
     }
 
+    // Инициализация шапки
     private void initHeadLayout() {
         headLayout = new HorizontalLayout();
         patientButton = new Button(Entity.PATIENTS);
@@ -149,6 +151,7 @@ public class MainUI extends UI {
         headLayout.setDefaultComponentAlignment(Alignment.TOP_CENTER);
     }
 
+    // Инициализация страницы сущности
     private void initEntityPage(String entityName) {
         switch (entityName) {
             case Entity.PATIENT :
@@ -176,6 +179,7 @@ public class MainUI extends UI {
         }
     }
 
+    // Инициализация кнопок и их обработчиков
     private void preInitAddEditDelButtons() {
         addPatientButton = new Button(ADD);
         createAddOrEditButtonAndWindow(addPatientButton,
@@ -267,6 +271,7 @@ public class MainUI extends UI {
             updateEntityList(Entity.DOCTOR_PRESCRIPTION_INFO);
         });
         hideDoctorStatisticsButton = new Button(HIDE_STATISTICS);
+        hideDoctorStatisticsButton = new Button(HIDE_STATISTICS);
         hideDoctorStatisticsButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         hideDoctorStatisticsButton.addClickListener(e -> {
             addEntityLayout.removeComponent(hideDoctorStatisticsButton);
@@ -277,9 +282,10 @@ public class MainUI extends UI {
 
     private void createAddOrEditButtonAndWindow
             (Button button, NewEntityWindow window, boolean isNewEntity) {
+            window.setCreateNewForm(isNewEntity);
         button.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         button.addClickListener(e -> {
-            if (!isNewEntity) {
+            if (!window.isNewForm()) {
                 Object rowObj = grid.getSelectedRow();
                 if (rowObj == null) {
                     Window alertWindow = new Window();
@@ -301,9 +307,10 @@ public class MainUI extends UI {
                 } else if (rowObj instanceof Prescription) {
                     window.setEntity((Prescription)rowObj);
                 }
+            } else {
+                window.setEntity(null);
             }
             grid.deselectAll();
-            window.setCreateNewForm(isNewEntity);
             addWindow(window);
         });
     }

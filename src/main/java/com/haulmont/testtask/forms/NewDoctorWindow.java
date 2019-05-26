@@ -55,7 +55,18 @@ public class NewDoctorWindow extends NewEntityWindow {
         isNewForm = boo;
     }
 
+    public boolean isNewForm() {
+        return isNewForm;
+    }
+
     public void setEntity(Entity entity) {
+        if (entity == null) {
+            firstName.setValue("");
+            lastName.setValue("");
+            middleName.setValue("");
+            specialization.setValue("");
+            return;
+        }
         Doctor doctor = (Doctor)entity;
         this.doctor = doctor;
         firstName.setValue(doctor.getName());

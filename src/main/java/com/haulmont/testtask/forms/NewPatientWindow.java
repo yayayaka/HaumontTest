@@ -57,6 +57,13 @@ public class NewPatientWindow extends NewEntityWindow {
     }
 
     public void setEntity(Entity entity) {
+        if (entity == null) {
+            firstName.setValue("");
+            lastName.setValue("");
+            middleName.setValue("");
+            phone.setValue("");
+            return;
+        }
         Patient patient = (Patient)entity;
         this.patient = patient;
         firstName.setValue(patient.getName());
@@ -70,11 +77,16 @@ public class NewPatientWindow extends NewEntityWindow {
         this.close();
     }
 
+    @Override
+    public boolean isNewForm() {
+        return isNewForm;
+    }
+
     private void save() {
         if (isNewForm) {
             try {
                 patient = new Patient(-1, firstName.getValue(), lastName.getValue(),
-                        middleName.getValue(), Integer.valueOf(phone.getValue()));
+                        middleName.getValue(), Long.valueOf(phone.getValue()));
                 controller.addOne(patient);
             } catch (NumberFormatException e) {
                 AlertWindow alertWindow = new AlertWindow("Invalid phone value");
@@ -82,7 +94,7 @@ public class NewPatientWindow extends NewEntityWindow {
             }
         } else {
             patient = new Patient(patient.getId(), firstName.getValue(), lastName.getValue(),
-                    middleName.getValue(), Integer.valueOf(phone.getValue()));
+                    middleName.getValue(), Long.valueOf(phone.getValue()));
             controller.updateOne(patient);
         }
         mainUI.updateEntityList(Entity.PATIENT);

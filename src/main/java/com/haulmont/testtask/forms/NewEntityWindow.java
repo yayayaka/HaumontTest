@@ -25,4 +25,8 @@ public class NewEntityWindow extends Window {
     private void save() {
         throw new NotImplementedException();
     }
+
+    public boolean isNewForm() {
+        throw new NotImplementedException();
+    }
 }

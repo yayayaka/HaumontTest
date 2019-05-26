@@ -182,6 +182,7 @@ public class DoctorModel implements Model<Doctor>{
         }
     }
 
+    // Получение статистики по докторам
     public ArrayList<DoctorPrescrInfo> getDocPrescInfo() {
         ArrayList<DoctorPrescrInfo> info = new ArrayList<>();
         DoctorPrescrInfo infoRow;
